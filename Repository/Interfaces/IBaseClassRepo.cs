@@ -10,12 +10,12 @@ namespace Repository.Interfaces
 {
     public interface IBaseClassRepo<T> where T : BaseClass
     {
-        public IEnumerable<T> GetAll(Guid _U_id);
-        public T GetOne(Guid _id,Guid _U_id);
-        public bool Delete(Guid id, Guid _U_id);
-        public bool update(T t);
-        public bool Create(T t);
-        public void SaveChange();
+        public Task<IEnumerable<T>> GetAll(string _U_id, CancellationToken _tokken);
+        public Task<T> GetOne(string _id, string _U_id, CancellationToken _tokken);
+        public Task<bool> Delete(string id, string _U_id, CancellationToken _tokken);
+        public Task<bool> update(T t, string _U_id, CancellationToken _tokken);
+        public Task<bool> Create(T t, CancellationToken token);
+        public Task SaveChange();
 
     }
 }

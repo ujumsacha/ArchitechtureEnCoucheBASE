@@ -5,12 +5,13 @@ using Repository.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Repository.Implementations
 {
-    public class BaseClasseRepo<T> : IBaseClassRepo<BaseClass>  where T : BaseClass
+    public class BaseClasseRepo<T> : IBaseClassRepo<T>  where T : BaseClass
     {
         public readonly ApplicationContext Context;
         private readonly DbSet<T> Entite;
@@ -19,42 +20,62 @@ namespace Repository.Implementations
             Context = _context;
             Entite = Context.Set<T>();
         }
-
-        public bool Create(BaseClass _t)
+        
+        public async Task<bool> Create(T _baseclass,CancellationToken token)
         {
-            if(_t == null)    
+
+            //*************************************Cancel task ***********************************************************
+            /*CancellationTokenSource cnl = new CancellationTokenSource();
+            cnl.CancelAfter(5000);*/
+            //*************************************Cancel task ***********************************************************
+
+            if (_baseclass == null)    
                 return false;
-            _t.r_is_delete = false;
-            _t.r_is_desactivate = false;
-            _t.r_created_on = DateTime.Now;
-            _t.r_id= new Guid(Guid.NewGuid().ToString());
+            _baseclass.r_is_delete = false;
+            _baseclass.r_is_desactivate = false;
+            _baseclass.r_created_on = DateTime.Now;
+            _baseclass.r_id= Guid.NewGuid().ToString();
 
-            Entite.AddAsync(_t);
+            await Entite.AddAsync(_baseclass, token);
+            await SaveChange();
+            return true;
         }
 
-        public bool Delete(Guid id, Guid _U_id)
+        public async Task<bool> Delete(string id, string _U_id, CancellationToken _tokken)
         {
-            throw new NotImplementedException();
+           var result = await Entite.Where(p => p.r_id == id && p.r_created_by == _U_id).FirstOrDefaultAsync(_tokken);
+            if (result == null)
+                return false;
+            result.r_is_delete = true;
+            Entite.Entry(result);
+            await SaveChange();
+            return true;
         }
 
-        public IEnumerable<BaseClass> GetAll(Guid _U_id)
+        public async Task<IEnumerable <T>> GetAll(string _U_id,CancellationToken _tokken)
         {
-            throw new NotImplementedException();
+            return await Entite.Where(p=>p.r_is_delete == false && p.r_created_by == _U_id).ToListAsync(_tokken);
         }
 
-        public async Task<BaseClass>  GetOne(string _id, Guid _U_id)
+        public async Task<T>  GetOne(string _id, string _U_id,CancellationToken _tokken)
         {
-            return await Entite.Where()
+            return await Entite.Where(p => p.r_id == _id && p.r_is_delete==false && p.r_created_by==_U_id).FirstOrDefaultAsync(_tokken);
         }
 
-        public async Task SaveChange(CancellationToken _tokken)
+        public async Task SaveChange()
         {
-           await Context.SaveChangesAsync(_tokken);
+           await Context.SaveChangesAsync();
         }
 
-        public bool update(BaseClass t)
+        public async Task<bool> update(T t, string _U_id, CancellationToken _tokken)
         {
-            throw new NotImplementedException();
+            var result = await Entite.Where(p => p.r_id == t.r_id && p.r_created_by == _U_id).FirstOrDefaultAsync(_tokken);
+            if (result == null)
+                return false;
+            result.r_is_delete = true;
+            Entite.Entry(result);
+            await SaveChange();
+            return true;
         }
     }
 }
