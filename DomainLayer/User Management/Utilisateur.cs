@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core
+namespace Core.User_Management
 {
     public class Utilisateur: BaseClass
     {
@@ -25,5 +25,8 @@ namespace Core
         [DataType(DataType.Password)]
         [MaxLength(255)]
         public string r_password { get; set; }
+
+        public string r_id_Role { get; set; }
+        public Role r_Role { get; set; }
     }
 }

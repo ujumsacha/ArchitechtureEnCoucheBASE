@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.User_Management;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +16,7 @@ namespace Core
         public bool r_is_desactivate { get; set; }
         public DateTime r_created_on { get; set; }
         public DateTime? r_update_on { get; set; }
+    
+
     }
 }
