@@ -38,7 +38,7 @@ namespace ArchitechtureEnCoucheBASE
 
 
             app.MapControllers();
-
+            app.JwtMiddleware();
             app.Run();
         }
     }
