@@ -16,7 +16,10 @@ namespace Core
         public bool r_is_desactivate { get; set; }
         public DateTime r_created_on { get; set; }
         public DateTime? r_update_on { get; set; }
-    
+
+        public string  r_CompanieID { get; set; }
+        public Compagnie  r_Companie { get; set; }
+
 
     }
 }

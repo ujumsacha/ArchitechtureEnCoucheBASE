@@ -18,6 +18,10 @@ namespace Core.User_Management
         [MaxLength(100)]
         public string r_prenoms { get; set; }
         [Required]
+        [DataType(DataType.Text)]
+        [MaxLength(100)]
+        public string r_contact { get; set; }
+        [Required]
         [DataType(DataType.EmailAddress)]
         [MaxLength(255)]
         public string r_email { get; set; }

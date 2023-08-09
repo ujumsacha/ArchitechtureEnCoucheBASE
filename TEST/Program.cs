@@ -14,30 +14,23 @@ namespace TEST
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            builder.WebHost.UseKestrel(opt => opt.AddServerHeader = false);
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
 
-            builder.Services.AddAuthentication(k =>
-            {
-                k.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                k.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(p =>
-            {
-                var key = Encoding.UTF8.GetBytes(builder.Configuration["JWTToken:key"]);
-                p.SaveToken = true;
-                p.TokenValidationParameters = new TokenValidationParameters
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidateLifetime = false,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = builder.Configuration["JWKToekn:Issuer"],
-                    ValidAudience = builder.Configuration["JWKToekn:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(key)
+                    ValidIssuer = builder.Configuration["JWTToken:Issuer"],
+                    ValidAudience = builder.Configuration["JWTToken:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTToken:Key"]))
                 };
             });
             var app = builder.Build();

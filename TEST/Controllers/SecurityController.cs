@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using TEST.Static;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,48 +20,43 @@ namespace TEST.Controllers
             _configuration = configuration;
         }
 
-
         // GET: api/<SecurityController>
-        [HttpPost]
+        [HttpGet("Authentification")]
+        public string Authentification()
+        {
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWTToken:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.Role,"Administrateur"),
+                new Claim("idCompagnie","2")
+            };
+            var token = new JwtSecurityToken(_configuration["JWTToken:Issuer"],
+                _configuration["JWTToken:Audience"],
+                claims,
+                expires: DateTime.Now.AddMinutes(15),
+                signingCredentials: credentials);
+
+
+            return Crypto.EncodeText(new JwtSecurityTokenHandler().WriteToken(token));
+
+        }
+
+        //GET api/<SecurityController>/5
+        [HttpGet("Get")]
+
         public string Get()
         {
-            var claims = new[] {
-                        new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                        new Claim("UserId", "sacha"),
-                        new Claim("DisplayName", "sacha"),
-                        new Claim("UserName", "sacha"),
-                        new Claim("Email", "sacha")
-                        
-                    };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-            var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(
-                _configuration["Jwt:Issuer"],
-                _configuration["Jwt:Audience"],
-                claims,
-                expires: DateTime.UtcNow.AddMinutes(15),
-                signingCredentials: signIn);
-
-            return "sacha";
+           return  HttpContext.Request.Headers.Authorization.ToString();
+           // //return BCrypt.Net.BCrypt.HashPassword(id);
+           // if (BCrypt.Net.BCrypt.Verify("get", "$2a$11$/ejkmMezYN87vERZSTOePuS6Bry4BZbZTt6akewxLbAoTuteGdpy2"))
+           //     return "verifié avec succes";
+           // else
+           //     return "erreur de verification";
         }
 
-        // GET api/<SecurityController>/5
-        [HttpGet("{id}")]
-        public string Get(string id)
-        {
-            //return BCrypt.Net.BCrypt.HashPassword(id);
-            if (BCrypt.Net.BCrypt.Verify("get", "$2a$11$/ejkmMezYN87vERZSTOePuS6Bry4BZbZTt6akewxLbAoTuteGdpy2"))
-                return "verifié avec succes";
-            else
-                return "erreur de verification";
-
-
-        }
-
-        // POST api/<SecurityController>
+        //POST api/<SecurityController>
         [HttpPost]
         public void Post([FromBody] string value)
         {

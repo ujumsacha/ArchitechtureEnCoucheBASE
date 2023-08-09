@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.User_Management;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -22,6 +23,10 @@ namespace Repository.BdFolder
         public DbSet<Utilisateur> DbUtilisateur { get; set; }
         public DbSet<Produit> DbProduit { get; set; }
         public DbSet<Acheter> DbAcheter { get; set; }
+        public DbSet<Role> DbRole { get; set; }
+        public DbSet<Compagnie> DbCompagnie { get; set; }
+        public DbSet<ActionRole> DbActionRole { get; set; }
+        
 
 
 

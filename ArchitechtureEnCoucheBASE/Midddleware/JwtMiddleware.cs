@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using ArchitechtureEnCoucheBASE.Extensions;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using System;
 using System.Net;
 using System.Threading.Tasks;
-using TEST.Static;
 
-namespace TEST
+namespace ArchitechtureEnCoucheBASE.Midddleware
 {
     // You may need to install the Microsoft.AspNetCore.Http.Abstractions package into your project
     public class JwtMiddleware
@@ -23,7 +22,7 @@ namespace TEST
             {
 
                 return _next(httpContext);
-                
+
             }
             else
             {
@@ -41,12 +40,11 @@ namespace TEST
                     return Task.CompletedTask;
                 }
                 mytokken = mytokken.Replace("Bearer ", String.Empty);
-                string recup = Crypto.Decrytp(mytokken);
-                httpContext.Request.Headers.Authorization =$"Bearer {recup}";
+                string recup = CryptoClass.Decrytp(mytokken);
+                httpContext.Request.Headers.Authorization = $"Bearer {recup}";
 
                 return _next(httpContext);
             }
-            
         }
     }
 
