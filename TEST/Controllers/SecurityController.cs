@@ -29,8 +29,9 @@ namespace TEST.Controllers
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[]
             {
-                new Claim(ClaimTypes.Role,"Administrateur"),
-                new Claim("idCompagnie","2")
+                new Claim("Roleid","XNDER-RETR"),
+                new Claim("idCompagnie","2"),
+                new Claim("iduser","USERID0000001"),
             };
             var token = new JwtSecurityToken(_configuration["JWTToken:Issuer"],
                 _configuration["JWTToken:Audience"],
@@ -42,10 +43,10 @@ namespace TEST.Controllers
             return Crypto.EncodeText(new JwtSecurityTokenHandler().WriteToken(token));
 
         }
-
+        
         //GET api/<SecurityController>/5
         [HttpGet("Get")]
-
+        [PersonalAuth]
         public string Get()
         {
            return  HttpContext.Request.Headers.Authorization.ToString();

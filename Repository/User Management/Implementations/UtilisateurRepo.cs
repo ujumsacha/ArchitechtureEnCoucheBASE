@@ -23,7 +23,7 @@ namespace Repository.Interfaces.User_Management.Implementations
             Entite = Context.Set<Utilisateur>();
         }
 
-        public async Task<bool> AddUserToRole(string _UserID, string _RoleId, CancellationToken _tokken)
+        public async Task<bool> AddUserToRole(string _UserID, string _RoleId, string _U_id, CancellationToken _tokken)
         {
             var User =await Entite.Where(p=>p.r_id==_UserID && p.r_id_Role== _RoleId).FirstOrDefaultAsync(_tokken);
             if (User == null)
@@ -35,17 +35,17 @@ namespace Repository.Interfaces.User_Management.Implementations
 
         }
 
-        public async Task<Utilisateur> FindUsersByEmail(string email, CancellationToken _tokken)
+        public async Task<Utilisateur> FindUsersByEmail(string email, string _U_id)
         {
-            return await Entite.Where(p=>p.r_email==email).FirstOrDefaultAsync(_tokken);
+            return await Entite.Where(p=>p.r_email==email).Include(p=>p.r_Role).FirstOrDefaultAsync();
         }
 
-        public async Task<Utilisateur> FindUsersByName(string name, CancellationToken _tokken)
+        public async Task<Utilisateur> FindUsersByName(string name, string _U_id, CancellationToken _tokken)
         {
             return await  Entite.Where(p => p.r_Nom.Contains(name)).FirstOrDefaultAsync(_tokken);
         }
 
-        public Task<bool> RemoveRoleOfUser(string _UserId, CancellationToken _tokken)
+        public Task<bool> RemoveRoleOfUser(string _UserId, string _U_id, CancellationToken _tokken)
         {
             throw new NotImplementedException();
         }

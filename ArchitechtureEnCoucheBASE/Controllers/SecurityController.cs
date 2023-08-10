@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ArchitechtureEnCoucheBASE.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -22,6 +23,7 @@ namespace ArchitechtureEnCoucheBASE.Controllers
 
         // GET: api/<SecurityController>
         [HttpPost]
+        [AuthorizationExtension]
         public string Get()
         {
             var claims = new[] {

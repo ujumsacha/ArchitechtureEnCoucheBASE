@@ -10,6 +10,6 @@ namespace Repository.User_Management.Interfaces
 {
     public interface IRoleRepo : IBaseClassRepo<Role>
     {
-        public Task<Role> GetRoleofUser(string _UserId);
+        public Task<Role> GetRoleofUser(string _UserId, string _U_id);
     }
 }

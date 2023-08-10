@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.User_Management.Interfaces
 {
-    public interface IActionRoleService
+    public interface IUtilisateurService
     {
-        public Task<bool> HaveAcces(string _RoleUser, string _Controller, string _Action, string _compagnie);
+        public Task<UtilisateurReceiveRoleActionDTO> GetUserWithEmail(string _email,string _compagnieID );
         
     }
 }

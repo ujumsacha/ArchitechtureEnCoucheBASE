@@ -2,19 +2,25 @@
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Net;
 using System.Security.Claims;
 
 namespace ArchitechtureEnCoucheBASE.Extensions
 {
-    public class AuthorizationExtension : IAuthorizationFilter
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+    public class AuthorizationExtension : Attribute,IAuthorizationFilter
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
         
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-           string machaine  = _httpContextAccessor.HttpContext!.Request.Headers["Authorization"].ToString();
-           string _Controller = _httpContextAccessor.HttpContext.Request.GetDisplayUrl();
-            
+            if (context.HttpContext.Items["User"].Equals(false))
+            {
+                context.HttpContext.Response.Clear();
+                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                context.HttpContext.Response.WriteAsJsonAsync(new { code = "ERR001", Description = "Veuillez renseigner le tokken " });
+
+            }
+
 
         }
     }
