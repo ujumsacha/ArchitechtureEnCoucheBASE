@@ -23,7 +23,6 @@ namespace ArchitechtureEnCoucheBASE
             builder.Services.AddSwaggerGen();
             builder.WebHost.UseKestrel(opt => opt.AddServerHeader = false);
             //***********************Add configuration setting recuperation **********************
-            builder.Services.AddSingleton<IAppConfigSetting, AppConfigSetting>();
             builder.Services.AddDbContext<Repository.BdFolder.ApplicationContext>(options => options.UseSqlServer(
                 builder.Configuration.GetConnectionString("DefaultConnection"))
 
