@@ -25,7 +25,7 @@ namespace ArchitechtureEnCoucheBASE
             //***********************Add configuration setting recuperation **********************
             builder.Services.AddSingleton<IAppConfigSetting, AppConfigSetting>();
             builder.Services.AddDbContext<Repository.BdFolder.ApplicationContext>(options => options.UseSqlServer(
-                builder.Configuration.GetConnectionString("OnlineConnection"))
+                builder.Configuration.GetConnectionString("DefaultConnection"))
 
             );
             builder.Services.AddSwaggerGen(swagger =>

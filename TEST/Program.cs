@@ -1,6 +1,7 @@
 using BusinessLogic.User_Management.Implementations;
 using BusinessLogic.User_Management.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -25,7 +26,8 @@ namespace TEST
             builder.Services.AddSwaggerGen();
             builder.Services.AddSingleton<IActionRoleService, ActionRoleService>();
             builder.Services.AddSingleton<IUtilisateurService, UtilisateurService>();
-
+            builder.Services.AddDbContext<Repository.BdFolder.ApplicationContext>(options => options.UseSqlServer(
+                builder.Configuration.GetConnectionString("DefaultConnection")));
             //**************************************SWAGGER*****************************************************************************
             builder.Services.AddSwaggerGen(swagger =>
             {
