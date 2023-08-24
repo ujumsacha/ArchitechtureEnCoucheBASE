@@ -4,11 +4,15 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-
+using Repository;
+using Repository.User_Management.Interfaces;
+using Repository.User_Management.Implementations;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 using System.Text;
 using System.Xml.XPath;
+using Repository.Interfaces.User_Management.Interfaces;
+using Repository.Interfaces.User_Management.Implementations;
 
 namespace TEST
 {
@@ -20,14 +24,18 @@ namespace TEST
 
             // Add services to the container.
             builder.WebHost.UseKestrel(opt => opt.AddServerHeader = false);
+            builder.Services.AddScoped<IActionRoleService, ActionRoleService>();
+            builder.Services.AddScoped<IActionRoleRepo, ActionRoleRepo>();
+            builder.Services.AddScoped<IUtilisateurService, UtilisateurService>();
+            builder.Services.AddScoped<IUtilisateurRepo, UtilisateurRepo>();
+            builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer("Server=172.10.10.35;initial catalog=Test_templateAsp;User id=sa;Password=Admin@@2020"),ServiceLifetime.Scoped);
+
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddSingleton<IActionRoleService, ActionRoleService>();
-            builder.Services.AddSingleton<IUtilisateurService, UtilisateurService>();
-            builder.Services.AddDbContext<Repository.BdFolder.ApplicationContext>(options => options.UseSqlServer(
-                builder.Configuration.GetConnectionString("DefaultConnection")));
+           
+            //builder.Services.AddDbContext<ApplicationContext>();
             //**************************************SWAGGER*****************************************************************************
             builder.Services.AddSwaggerGen(swagger =>
             {

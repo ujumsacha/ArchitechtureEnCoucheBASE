@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BusinessLogic.DTO;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -73,6 +74,34 @@ namespace TEST.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        [HttpPost("Uploadphoto")]
+        public async Task<IActionResult> UploadFileWithObject(IFormFile file, [FromBody] UtilisateurSaveDTO yourObject)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
+
+            if (yourObject == null)
+            {
+                return BadRequest("No object provided.");
+            }
+
+            // Process the uploaded file
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+                byte[] fileBytes = memoryStream.ToArray();
+                // Do something with the fileBytes, like saving to disk or processing
+
+                // Now you can also use the 'yourObject' that was sent in the request
+                // Perform actions with yourObject
+
+                // Return a success response
+                return Ok("File uploaded and object received successfully.");
+            }
         }
     }
 }

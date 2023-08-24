@@ -1,7 +1,6 @@
 ﻿using Core;
 using Core.User_Management;
 using Microsoft.EntityFrameworkCore;
-using Repository.BdFolder;
 using Repository.Implementations;
 using Repository.Interfaces;
 using Repository.Interfaces.User_Management.Interfaces;

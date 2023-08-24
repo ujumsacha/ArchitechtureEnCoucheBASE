@@ -1,6 +1,5 @@
 ﻿using Core;
 using Microsoft.EntityFrameworkCore;
-using Repository.BdFolder;
 using Repository.Interfaces;
 using System;
 using System.Collections.Generic;

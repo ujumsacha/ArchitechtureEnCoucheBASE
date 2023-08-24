@@ -10,14 +10,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repository.BdFolder
+namespace Repository
 
 {
     public class ApplicationContext : DbContext
     {
-        public ApplicationContext(DbContextOptions<ApplicationContext> option) : base(option)
+        protected readonly IConfiguration _configuration;    
+        public ApplicationContext(DbContextOptions<ApplicationContext> option, IConfiguration configuration) : base(option)
         {
-            
+            _configuration = configuration;
         }
 
         public DbSet<Utilisateur> DbUtilisateur { get; set; }
@@ -26,20 +27,19 @@ namespace Repository.BdFolder
         public DbSet<Role> DbRole { get; set; }
         public DbSet<Compagnie> DbCompagnie { get; set; }
         public DbSet<ActionRole> DbActionRole { get; set; }
-        
+
 
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             OnModelCreating(modelBuilder);
-            
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            
-
+            var conn = _configuration.GetConnectionString("DefaultConnection");
+            optionsBuilder.UseSqlServer(conn);
         }
-        
+
     }
 }

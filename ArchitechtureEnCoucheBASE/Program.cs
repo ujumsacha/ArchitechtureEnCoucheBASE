@@ -2,9 +2,10 @@ using ArchitechtureEnCoucheBASE.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Repository.BdFolder;
+using Repository;
 using System.Text;
 
 namespace ArchitechtureEnCoucheBASE
@@ -23,10 +24,13 @@ namespace ArchitechtureEnCoucheBASE
             builder.Services.AddSwaggerGen();
             builder.WebHost.UseKestrel(opt => opt.AddServerHeader = false);
             //***********************Add configuration setting recuperation **********************
-            builder.Services.AddDbContext<Repository.BdFolder.ApplicationContext>(options => options.UseSqlServer(
-                builder.Configuration.GetConnectionString("DefaultConnection"))
+            builder.Services.AddSingleton<ApplicationContext>();
 
-            );
+
+            //builder.Services.AddDbContext<ApplicationContext>(options =>
+                                    //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Repository"))); 
+
+            
             builder.Services.AddSwaggerGen(swagger =>
             {
                 //This is to generate the Default UI of Swagger Documentation

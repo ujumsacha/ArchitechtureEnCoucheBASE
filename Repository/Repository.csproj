@@ -26,4 +26,8 @@
     <ProjectReference Include="..\DomainLayer\Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="BdFolder\" />
+  </ItemGroup>
+
 </Project>
