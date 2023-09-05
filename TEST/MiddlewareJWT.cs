@@ -17,13 +17,13 @@ namespace TEST
         private readonly RequestDelegate _next;
         private readonly IConfiguration _configuration;
         private readonly IActionRoleService _actionrole;
-        private readonly IUtilisateurService _UtilisateurService;
-        public MiddlewareJWT(RequestDelegate next, IConfiguration configuration, IActionRoleService actionrole, IUtilisateurService utilisateurService)
+
+        public MiddlewareJWT(RequestDelegate next, IConfiguration configuration, IActionRoleService actionrole )
         {
             _next = next;
             _configuration = configuration;
             _actionrole = actionrole;
-            _UtilisateurService = utilisateurService;
+
         }
 
         public async Task Invoke(HttpContext httpContext)
@@ -33,8 +33,6 @@ namespace TEST
             if (httpContext.Request.Path.ToUriComponent().Contains("Authentification"))
             {
                 await _next(httpContext);
-
-
             }
             else
             {
@@ -54,6 +52,8 @@ namespace TEST
         {
             try
             {
+                
+
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
                 tokenHandler.ValidateToken(token, new TokenValidationParameters

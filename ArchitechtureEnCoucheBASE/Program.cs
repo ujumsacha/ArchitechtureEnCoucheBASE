@@ -1,4 +1,6 @@
 using ArchitechtureEnCoucheBASE.Middleware;
+using BusinessLogic.User_Management.Implementations;
+using BusinessLogic.User_Management.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -6,6 +8,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repository;
+using Repository.Implementations;
+using Repository.Interfaces.User_Management.Implementations;
+using Repository.Interfaces.User_Management.Interfaces;
+using Repository.Interfaces;
+using Repository.User_Management.Implementations;
+using Repository.User_Management.Interfaces;
 using System.Text;
 
 namespace ArchitechtureEnCoucheBASE
@@ -18,19 +26,28 @@ namespace ArchitechtureEnCoucheBASE
 
             // Add services to the container.
 
+            
+            builder.WebHost.UseKestrel(opt => opt.AddServerHeader = false);
+            //***********************Add configuration setting recuperation **********************
+            builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer("Server=172.10.10.35;initial catalog=Test_templateAsp;User id=sa;Password=Admin@@2020"), ServiceLifetime.Scoped, ServiceLifetime.Scoped);
+            builder.Services.AddScoped<ApplicationContext>();
+            builder.Services.AddTransient<IActionRoleRepo, ActionRoleRepo>();
+            builder.Services.AddTransient<IActionRoleService, ActionRoleService>();
+            builder.Services.AddTransient<IUtilisateurRepo, UtilisateurRepo>();
+            builder.Services.AddTransient<IUtilisateurService, UtilisateurService>();
+
+            builder.Services.AddTransient<IRoleRepo, RoleRepo>();
+            builder.Services.AddTransient<IproduitRepo, ProduitRepo>();
+            builder.Services.AddTransient<IAcheterRepo, AcheterRepo>();
+
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.WebHost.UseKestrel(opt => opt.AddServerHeader = false);
-            //***********************Add configuration setting recuperation **********************
-            builder.Services.AddSingleton<ApplicationContext>();
-
-
             //builder.Services.AddDbContext<ApplicationContext>(options =>
-                                    //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Repository"))); 
+            //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Repository"))); 
 
-            
+
             builder.Services.AddSwaggerGen(swagger =>
             {
                 //This is to generate the Default UI of Swagger Documentation
@@ -99,7 +116,7 @@ namespace ArchitechtureEnCoucheBASE
 
 
             app.MapControllers();
-            app.UseMiddlewareJWT();
+            //app.UseMiddlewareJWT();
             app.Run();
         }
     }

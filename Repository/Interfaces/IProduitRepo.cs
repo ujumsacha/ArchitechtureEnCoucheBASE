@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace Repository.Interfaces
 {
-    internal interface IproduitRepo : IBaseClassRepo<Produit>
+    public interface IproduitRepo : IBaseClassRepo<Produit>
     {
+
     }
 }

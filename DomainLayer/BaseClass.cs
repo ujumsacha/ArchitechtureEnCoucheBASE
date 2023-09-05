@@ -1,12 +1,14 @@
 ﻿using Core.User_Management;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Core
 {
+    [NotMapped]
     public class BaseClass
     {
         public string r_id { get; set; }

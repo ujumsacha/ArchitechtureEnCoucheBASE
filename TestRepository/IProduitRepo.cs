@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repository.Interfaces
+namespace TestRepository
 {
-    public interface IAcheterRepo : IBaseClassRepo<Acheter>
+    public interface IproduitRepo : IBaseClassRepo<Produit>
     {
 
     }
